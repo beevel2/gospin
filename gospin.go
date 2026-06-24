@@ -111,6 +111,10 @@ func (s *Spinner) SpinN(str string, times int) ([]string, error) {
 
 func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int) (bool, error) {
 	if *step >= len([]rune(*str)) {
+		if level > 0 {
+			return false, errors.New(errBracketsNotMatching)
+		}
+
 		return false, nil
 	}
 
@@ -124,6 +128,9 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 		for running && err == nil {
 			start++
 			running, err = s.walk(seq, &start, str, 0, level)
+		}
+		if err != nil {
+			return false, err
 		}
 
 		selected := s.selectOpt(string([]rune(*str)[*step : start+1]))
