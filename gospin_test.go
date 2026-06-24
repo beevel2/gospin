@@ -1,9 +1,11 @@
 package gospin
 
 import (
-	"github.com/stretchr/testify/assert"
 	"math/rand"
+	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSpinner_Spin(t *testing.T) {
@@ -89,6 +91,27 @@ func TestSpinner_Spin_BracketsNotMatchingErr(t *testing.T) {
 		return
 	}
 	assert.EqualError(t, err, errBracketsNotMatching, "should be equal")
+}
+
+func TestSpinner_Spin_UnmatchedOpeningBraceErr(t *testing.T) {
+	rand.Seed(1)
+	spinner := New(&Config{UseGlobalRand: true})
+
+	tests := []string{
+		"The {slow|quick {brown|blue} fox",
+		"The {slow|quick",
+		"The slow fox {",
+		strings.Repeat("a", 143) + "{",
+	}
+
+	for _, simple := range tests {
+		_, err := spinner.Spin(simple)
+		if err == nil {
+			assert.Fail(t, "was expecting error", simple)
+			continue
+		}
+		assert.EqualError(t, err, errBracketsNotMatching, "should be equal")
+	}
 }
 
 func TestSpinner_Spin_WithCustomConfig(t *testing.T) {
