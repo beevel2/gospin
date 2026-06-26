@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/m1/gospin"
+	"github.com/beevel2/gospin"
 )
 
 var (
