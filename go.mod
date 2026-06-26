@@ -1,4 +1,4 @@
-module github.com/m1/gospin
+module github.com/beevel2/gospin
 
 require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
